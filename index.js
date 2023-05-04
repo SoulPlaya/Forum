@@ -25,6 +25,9 @@ const sessionConfig = {
 router.use(koaBody())
 router.use(session(sessionConfig, app))
 
+// To launch the project, open a terminal and type: node .
+// To stop it, do CTRL+C in the terminal and then re-run the above command.
+
 // Read about Koa and web frameworks in general
 
 // Middleware package for serving static files (like JS, CSS, images, etc)
