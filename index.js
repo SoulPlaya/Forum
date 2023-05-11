@@ -1,13 +1,31 @@
+const config = require('./config.json')
+
 const Koa = require('koa')
-const Router = require('@koa/router');
-const session = require('koa-session');
-const { koaBody } = require('koa-body');
+const Router = require('@koa/router')
+const session = require('koa-session')
+const render = require('@koa/ejs')
+const path = require('node:path')
+const koaStatic = require('koa-static')
+const koaMount = require('koa-mount')
+const { koaBody } = require('koa-body')
 
 const app = new Koa()
 const router = new Router();
 
-// Set up session (don't worry about it bro)
-app.keys = ['secretKeyUsedToProtectUsDontShareOrDie']
+// Mount static files located in the "static" directory at /static on the webserver
+app.use(koaMount('/static', koaStatic(path.join(__dirname, 'static'))))
+
+render(app, {
+    root: path.join(__dirname, 'view'),
+    layout: 'layout',
+    viewExt: 'ejs',
+    cache: config.productionMode,
+    debug: false,
+    async: true,
+})
+
+// Set up session
+app.keys = [config.sessionSecret]
 
 const sessionConfig = {
   key: 'forum-session',
@@ -25,20 +43,11 @@ const sessionConfig = {
 router.use(koaBody())
 router.use(session(sessionConfig, app))
 
-// To launch the project, open a terminal and type: node .
-// To stop it, do CTRL+C in the terminal and then re-run the above command.
-
-// Read about Koa and web frameworks in general
-
-// Middleware package for serving static files (like JS, CSS, images, etc)
-// https://github.com/koajs/static
-
-// Middleware package for using EJS templates
-// https://github.com/koajs/ejs
-// EJS reference: https://ejs.co/
-
-// Example EJS: <p>Welcome back, <%= username %></p>
-// Will be translated by the server into (and served as): <p>Welcome, back, soul</p> (assuming username variable provided by the server is "soul")
+// Create a My Profile page, storing the profile info in ctx.session
+// When you first log in, set all of the profile values (name, age, bio) to null
+// Redirect to login on the My Profile page if you're not signed in
+// Create a Edit My Profile page that lets you set those values
+//^button in /home that gets you to edit profile
 
 // Logger middleware
 router.use(async (ctx, next) => {
@@ -49,21 +58,7 @@ router.use(async (ctx, next) => {
 router.get('/', async (ctx, next) => {
     const name = ctx.query.name || 'Anonymous'
 
-    ctx.body = `
-        <form action="" method="POST">
-            <label for="username">Username: </label>
-            <input id="username" name="username" type="text" />
-
-            <br><br>
-
-            <label for="password">Password: </label>
-            <input id="password" name="password" type="password" />
-
-            <br><br>
-
-            <input type="submit" value="Log In" />
-        </form>
-    `
+    await ctx.render('login', { pageTitle: 'Log In', errorMessage: null })
 })
 
 router.post('/', async (ctx, next) => {
@@ -75,16 +70,24 @@ router.post('/', async (ctx, next) => {
         ctx.session.loggedIn = true
         ctx.redirect('/home')
     } else {
-        ctx.body = 'Ur GAY'
+        await ctx.render('login', { pageTitle: 'Log In', errorMessage: 'Ur GAY' })
+    }
+})
+
+router.get('/myProfile', async (ctx, next) => {
+    if (!ctx.session.loggedIn) {
+        ctx.redirect('/')
+        return
     }
 })
 
 router.get('/home', async (ctx, next) => {
-    if (ctx.session.loggedIn) {
-        ctx.body = `Welcome home ${ctx.session.username}`
-    } else {
+    if (!ctx.session.loggedIn) {
         ctx.redirect('/')
+        return
     }
+
+    await ctx.render('home', { pageTitle: 'Home', username: ctx.session.username })
 })
 
 router.get('/logout', async (ctx, next) => {
@@ -96,4 +99,4 @@ app
     .use(router.routes())
     .use(router.allowedMethods())
 
-app.listen(3000, '0.0.0.0')
+app.listen(config.server.port, config.server.host)
