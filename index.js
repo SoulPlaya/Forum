@@ -10,7 +10,9 @@ const koaMount = require('koa-mount')
 const { koaBody } = require('koa-body')
 
 const app = new Koa()
-const router = new Router();
+const router = new Router()
+
+const dbUtil = require('./src/util/db.util')
 
 // Mount static files located in the "static" directory at /static on the webserver
 app.use(koaMount('/static', koaStatic(path.join(__dirname, 'static'))))
@@ -74,6 +76,40 @@ router.post('/', async (ctx, next) => {
     }
 })
 
+router.post('/profileEditor', async (ctx, next) => {
+    const aboutMe = ctx.request.body.aboutMe
+    const affiliation  = ctx.request.body.affiliation
+    const name = ctx.request.body.name
+
+    if (aboutMe !== '') {
+        ctx.session.aboutMe = aboutMe
+    }
+
+    if (affiliation !== '') {
+        ctx.session.affiliation = affiliation
+    }
+
+    if (name !== '') {
+        ctx.session.name = name
+    }
+
+    await ctx.render('profileEditor', { pageTitle: 'Profile editor' })
+})
+
+router.get('/profileEditor', async (ctx, next) => {
+    if (!ctx.session.loggedIn) {
+        ctx.redirect('/')
+        return
+    }
+
+    await ctx.render('profileEditor', { pageTitle: 'Profile editor' })
+})
+
+// For fun
+router.get('/input', async (ctx, next) => {
+    await ctx.render('input', { pageTitle: 'Example', input: ctx.query.input ?? '' })
+})
+
 router.get('/myProfile', async (ctx, next) => {
     if (!ctx.session.loggedIn) {
         ctx.redirect('/')
@@ -95,8 +131,27 @@ router.get('/logout', async (ctx, next) => {
     ctx.redirect('/')
 })
 
-app
-    .use(router.routes())
-    .use(router.allowedMethods())
+router.get('/Posts', async (ctx, next) => {
+    if (!ctx.session.loggedIn) {
+        ctx.redirect('/')
+        return
+    }
 
-app.listen(config.server.port, config.server.host)
+    await ctx.render('Posts', { pageTitle: 'Posts', errorMessage: null })
+})
+
+async function main() {
+    await dbUtil.initDb()
+
+    const result = await dbUtil.query('select * from users')
+
+    console.log(result)
+
+    app
+        .use(router.routes())
+        .use(router.allowedMethods())
+
+    app.listen(config.server.port, config.server.host)
+}
+
+main()
