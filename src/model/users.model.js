@@ -10,9 +10,9 @@
  * to it.
  * 
  * Keep in mind that models are only supposed to do database querying and returning work, not anything else like hashing passwords.
- * If you want to make a utility for say, creating a user with a username and password (which would require hashing),
+ * If you want to make a utility, for say, creating a user with a username and password (which would require hashing),
  * create a function in here for creating the raw user row with a username and password hash, and then make a util function in one
- * of the util files.
+ * of the util files that hashes the password and then calls the raw insert row function from this model.
  */
 
 const { query } = require('../util/db.util')
@@ -100,7 +100,7 @@ function firstRowToUserOrNull(rows) {
 /**
  * Converts an array of raw rows from the `users` table into User objects
  * @param {any[]} rows The rows to convert
- * @returns {User[]} The reuslting User objects
+ * @returns {User[]} The resulting User objects
  */
 function rowArrayToUsers(rows) {
     // We create an array to store the User objects we've created
@@ -187,7 +187,7 @@ async function getUserById(id) {
  * @returns {Promise<User | null>} The user, or null if none was found
  */
 async function getUserByUsername(username) {
-    const rows = await query('select * from users where username id = $1', [username])
+    const rows = await query('select * from users where username = $1', [username])
     return firstRowToUserOrNull(rows)
 }
 

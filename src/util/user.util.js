@@ -1,4 +1,6 @@
-const { User } = require("../model/users.model")
+const { User, createUserRow } = require("../model/users.model")
+
+const argon2 = require('argon2')
 
 /**
  * Logs out the provided request context
@@ -7,7 +9,7 @@ const { User } = require("../model/users.model")
 function logOutRequest(ctx) {
     ctx.isLoggedIn = false
     ctx.user = null
-    ctx.session.userId
+    ctx.session.userId = undefined
 }
 
 /**
@@ -28,7 +30,8 @@ function logInRequest(ctx, user) {
  * @returns {Promise<User>} The newly created user
  */
 async function createUser(username, password) {
-    // TODO Hash the password and then use users.model.js to create a new user in the DB
+    const hashPass = await argon2.hash(password)
+    return await createUserRow(username, hashPass)
 }
 
 module.exports = {

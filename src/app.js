@@ -16,6 +16,7 @@ const loggerMiddleware = require('./middleware/logger.middleware')
 const authMiddleware = require('./middleware/auth.middleware')
 
 // Load controller modules
+const registerController = require('./controller/register.controller')
 const homeController = require('./controller/home.controller')
 const loginController = require('./controller/login.controller')
 const profileEditorController = require('./controller/profileeditor.controller')
@@ -77,6 +78,9 @@ async function main() {
     router.get('/my-profile', myProfileController.getMyProfile)
 
     router.get('/posts', postsController.getPosts)
+
+    router.get('/register', registerController.getRegister)
+    router.post('/register', registerController.postRegister)
 
     // Finish setting up the application server
     app

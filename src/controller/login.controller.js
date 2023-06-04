@@ -1,13 +1,16 @@
-const { logOutRequest } = require("../util/user.util")
+const { logOutRequest, logInRequest } = require('../util/user.util')
+const argon2 = require('argon2')
+const { getUserByUsername } = require("../model/users.model")
 
 /**
  * GET handler for the login page
  * @param {AppContext} ctx
  */
 async function getLogin(ctx) {
-    // TODO You should probably redirect to the homepage if the user is already logged in
-
-    const name = ctx.query.name || 'Anonymous'
+    if (ctx.isLoggedIn === true) {
+        ctx.redirect('/')
+        return
+    }
 
     await ctx.render('login', { pageTitle: 'Log In', errorMessage: null })
 }
@@ -20,18 +23,31 @@ async function postLogin(ctx) {
     // TODO You should probably redirect to the homepage if the user is already logged in
 
     // TODO This needs to be rewritten to use the DB.
-    // Check out user.util.js for some possibly useful utils for this.
+    // Check out user.util.js for some possibly useful utils for this
+    if (ctx.isLoggedIn === true) {
+        ctx.redirect('/')
+        return
+    }
 
     const username = ctx.request.body.username
     const password = ctx.request.body.password
 
-    if (password === 'IceCold') {
-        ctx.session.username = username
-        ctx.session.loggedIn = true
-        ctx.redirect('/')
-    } else {
+    const user = await getUserByUsername(username)
+
+    if (user === null) {
         await ctx.render('login', { pageTitle: 'Log In', errorMessage: 'Ur GAY' })
+        return
     }
+
+    const matched = await argon2.verify(user.passwordHash, password)
+    if (!matched) {
+        await ctx.render('login', { pageTitle: 'Log In', errorMessage: 'Ur GAY' })
+        return
+    }
+
+    logInRequest(ctx, user)
+
+    ctx.redirect('/')
 }
 
 /**

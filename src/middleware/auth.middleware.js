@@ -1,3 +1,5 @@
+const { getUserById } = require("../model/users.model")
+
 /**
  * Middleware that authenticates requests and attaches a User object to them
  * @param {AppContext} ctx 
@@ -13,12 +15,17 @@ async function authMiddleware(ctx, next) {
         await next()
         return
     }
+    
+    const user = await getUserById(ctx.session.userId)
 
-    // A user ID is available; fetch the associated user and assign ctx.user
-    // TODO Fetch user and assign ctx.user
-    // Use can use a function in users.model.js to do it.
-    // Make sure to check if the return value is null!
-    // If all is well, set ctx.isLoggedIn to true
+    if (user === null) {
+        delete ctx.session.userId
+        await next()
+        return
+    }
+
+    ctx.user = user
+    ctx.isLoggedIn = true
 
     await next()
 }
