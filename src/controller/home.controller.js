@@ -8,7 +8,7 @@ async function getHome(ctx) {
         return
     }
 
-    await ctx.render('home', { pageTitle: 'Home', username: ctx.user.username })
+    await ctx.defaultRender('home','Home', null)
 }
 
 module.exports = {

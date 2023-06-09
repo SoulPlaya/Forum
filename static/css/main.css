@@ -1,8 +1,18 @@
-#PostHref {
-color:green
+a {
+    color:green;
+    font-weight: bold
 }
 
-#EditProfileHref {
-    color:green;
-    opacity: 95%;
+#header {
+    padding: 5px;
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}
+#header-user {
+    float: right;
+}
+#header-title, #header-title a {
+    color: gold;
+    font-weight: bold;
+    text-decoration: none;
 }

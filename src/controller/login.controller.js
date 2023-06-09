@@ -12,7 +12,7 @@ async function getLogin(ctx) {
         return
     }
 
-    await ctx.render('login', { pageTitle: 'Log In', errorMessage: null })
+    await ctx.defaultRender('login', 'Log In', null )
 }
 
 /**
@@ -35,13 +35,13 @@ async function postLogin(ctx) {
     const user = await getUserByUsername(username)
 
     if (user === null) {
-        await ctx.render('login', { pageTitle: 'Log In', errorMessage: 'Ur GAY' })
+        await ctx.defaultRender('login', 'Log In', 'Ur GAY' )
         return
     }
 
     const matched = await argon2.verify(user.passwordHash, password)
     if (!matched) {
-        await ctx.render('login', { pageTitle: 'Log In', errorMessage: 'Ur GAY' })
+      await ctx.defaultRender('login', 'Log In', 'Ur GAY' )
         return
     }
 

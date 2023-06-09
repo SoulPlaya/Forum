@@ -28,6 +28,14 @@ declare global {
          * The actual request
          */
         request: Request & { body?: any }
+
+        /**
+         * @param template The name of the template to render
+         * @param pageTitle The name of the page to render
+         * @param errorMessage The error message to provide (defaults to null)
+         * @param data Any additional data to pass
+         */
+        defaultRender: (template: string, pageTitle: string, errorMessage: string | null, data?: any) => Promise<void>
     }
 
     /**

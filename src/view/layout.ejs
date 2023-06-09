@@ -7,7 +7,19 @@
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
-    <%- body %>
+    <div id="header">
+        <div id="header-user">
+            <% if (isLoggedIn) { %>
+                <span><a href="/profileEditor"><%= user.username %></a></span>
+            <% } else {%>
+                <span><a href="/login">Sign in here</a></span>
+            <% } %>
+        </div>
+        <div id="header-title"><a href="/">Wizard Communion</a></div>
+    </div>
+    <div id="content">
+        <%- body %>
+    </div>
     <script src="/static/js/main.js"></script>
 </body>
 </html>

@@ -1,3 +1,14 @@
+const { User, updateUserProfile } = require('../model/users.model')
+
+
+/**
+ * @param {AppContext} ctx
+ * @param {string | null} errorMessage
+ */
+async function render(ctx, errorMessage = null) {
+  await ctx.defaultRender('profileEditor', 'Profile editor', null)
+}
+
 /**
  * GET handler for the profile editor page
  * @param {AppContext} ctx 
@@ -9,7 +20,7 @@ async function getProfileEditor(ctx, next) {
         return
     }
 
-    await ctx.render('profileEditor', { pageTitle: 'Profile editor' })
+    await render(ctx)
 }
 
 /**
@@ -18,31 +29,36 @@ async function getProfileEditor(ctx, next) {
  * @param {NextFunction} next 
  */
 async function postProfileEditor(ctx, next) {
-    // TODO Rewrite this to use database
-    // Also, this doesn't check if the user is logged in,
-    // which is a security risk.
-    // People can manually send a POST request even without
-    // having made a GET request to it, so the protection in
-    // getProfileEditor is not enough.
-    // We'll set up a protection middleware later to make this easier.
-
-    const aboutMe = ctx.request.body.aboutMe
-    const affiliation  = ctx.request.body.affiliation
-    const name = ctx.request.body.name
-
-    if (aboutMe !== '') {
-        ctx.session.aboutMe = aboutMe
+    if (!ctx.isLoggedIn) {
+        ctx.redirect('/login')
+        return
     }
 
-    if (affiliation !== '') {
-        ctx.session.affiliation = affiliation
+    const aboutMe = ctx.request.body['about-me']
+    const skillset  = ctx.request.body['wizard-skillset']
+    const displayName = ctx.request.body['display-name']
+
+    if (skillset.length > 250) {
+        await render(ctx, 'Too long of skillset lol try again dipshit kys')
+        return
     }
 
-    if (name !== '') {
-        ctx.session.name = name
+    if (aboutMe.length > 1000) {
+        await render(ctx, 'Too long of about me lol try again dipshit kys')
+        return
     }
 
-    await ctx.render('profileEditor', { pageTitle: 'Profile editor' })
+    if (displayName.length > 25) {
+        await render(ctx, 'Too long of display name lol try again kys')
+        return
+    }
+
+    await updateUserProfile(ctx.user.id, aboutMe, skillset, displayName)
+    ctx.user.aboutMe = aboutMe
+    ctx.user.skillset = skillset
+    ctx.user.displayName = displayName
+
+    await render(ctx)
 }
 
 module.exports = {

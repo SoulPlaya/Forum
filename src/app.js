@@ -14,6 +14,7 @@ const dbUtil = require('./util/db.util')
 // Load middleware modules
 const loggerMiddleware = require('./middleware/logger.middleware')
 const authMiddleware = require('./middleware/auth.middleware')
+const utilMiddleware = require('./middleware/utils.middleware')
 
 // Load controller modules
 const registerController = require('./controller/register.controller')
@@ -22,6 +23,9 @@ const loginController = require('./controller/login.controller')
 const profileEditorController = require('./controller/profileeditor.controller')
 const myProfileController = require('./controller/myprofile.controller')
 const postsController = require('./controller/posts.controller')
+const utilsMiddleware = require('./middleware/utils.middleware')
+
+const PROJECT_ROOT = path.join(__dirname, '..')
 
 async function main() {
     await dbUtil.initDb()
@@ -31,7 +35,7 @@ async function main() {
     const router = new Router()
 
     // Mount static files located in the "static" directory at /static on the webserver
-    app.use(koaMount('/static', koaStatic(path.join(__dirname, 'static'))))
+    app.use(koaMount('/static', koaStatic(path.join(PROJECT_ROOT, 'static'))))
 
     render(app, {
         root: path.join(__dirname, 'view'),
@@ -64,6 +68,7 @@ async function main() {
     // Register middleare
     router.use(loggerMiddleware)
     router.use(authMiddleware)
+    router.use(utilsMiddleware)
 
     // Register controller routes
     router.get('/', homeController.getHome)
@@ -72,8 +77,8 @@ async function main() {
     router.post('/login', loginController.postLogin)
     router.get('/logout', loginController.getLogout)
 
-    router.get('/profile-editor', profileEditorController.getProfileEditor)
-    router.post('/profile-editor', profileEditorController.postProfileEditor)
+    router.get('/profileEditor', profileEditorController.getProfileEditor)
+    router.post('/profileEditor', profileEditorController.postProfileEditor)
 
     router.get('/my-profile', myProfileController.getMyProfile)
 
@@ -81,6 +86,7 @@ async function main() {
 
     router.get('/register', registerController.getRegister)
     router.post('/register', registerController.postRegister)
+
 
     // Finish setting up the application server
     app
@@ -95,3 +101,16 @@ async function main() {
 }
 
 main()
+
+
+/*
+Create user profile page.
+The URL format will be: /profile, and then you can get the username from ctx.query.username.
+Example: The user visits /profile?username=jimmy and it shows the profile info from jimmy.
+
+You can use the getUserByUsername function in users.model.js. Make sure to check if the user returned is not null, like you did on login controller.
+Remember, you can inject the user with defaultRender's last argument as an object.
+Example: ctx.defaultRender('profile', 'Profile', null, { profileUser: theUserObjectYouGotFromGetUserByUsername })
+
+Use an ejs template like normal to display the profile info.
+*/

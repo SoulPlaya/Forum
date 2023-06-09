@@ -1,17 +1,23 @@
+<% if (errorMessage !== null) { %>
+    <p><%= errorMessage %></p>
+<% } %>
+
 <h1>Back to home? -></h1>
 <form action="" method="POST">
-    <label for="About Me">About Me: </label>
-    <input id="aboutMe" name="aboutMe" type="text" />
+    <label for="about-me">About Me: </label>
+    <textarea id="about-me" name="about-me" rows="5" cols="33"><%= user.aboutMe %></textarea>
 
     <br><br>
 
-    <label for="affiliation">Affiliation: </label>
-    <input id="affiliation" name="affiliation" type="text" />
+    <label for="wizard-skillset">Wizard skillset: </label>
+    <input id="wizard-skillset" name="wizard-skillset" type="text" value="<%= user.skillset %>" />
 
     <br><br>
 
-    <label for="name">Name: </label>
-    <input id="name" name="name" type="text" />
+    <label for="display-name">Display name: </label>
+    <input id="display-name" name="display-name" type="text" value="<%= user.displayName %>" />
 
+    <br><br>
+    
     <input type="submit" value="Save changes" />
 </form>

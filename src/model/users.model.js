@@ -60,6 +60,24 @@ class User {
      * @type {Date}
      */
     updatedTs
+
+    /**
+     * 
+     * @type {string}
+     */
+    aboutMe
+
+    /**
+     * 
+     * @type {string}
+     */
+    skillset 
+
+    /**
+     * 
+     * @type {string}
+     */
+    displayName
 }
 
 /**
@@ -72,6 +90,9 @@ function rowToUser(row) {
     res.id = row.id
     res.username = row.username
     res.passwordHash = row.password_hash
+    res.aboutMe = row.about_me
+    res.skillset = row.skillset
+    res.displayName = row.display_name
 
     // We use the new Date(...) constructor to convert the string
     // representation of the timestamp (e.g. "2023-06-03T18:21:51.855Z")
@@ -201,6 +222,17 @@ async function updateUserPasswordHash(id, newHash) {
 }
 
 /**
+ * updates profile of user
+ * @param {number} id the user's ID
+ * @param {string} aboutMe the users about me
+ * @param {string} skillset the users skillset
+ * @param {string} displayName users displayname
+ */
+async function updateUserProfile(id, aboutMe, skillset, displayName) {
+    await query('update users set about_me = $1, skillset = $2, display_name = $3 where id = $4', [aboutMe, skillset, displayName, id])
+}
+
+/**
  * Deletes the user with the specified ID
  * @param {number} id The user's ID
  */
@@ -216,4 +248,5 @@ module.exports = {
     getUserByUsername,
     updateUserPasswordHash,
     deleteUserById,
+    updateUserProfile,
 }

@@ -11,7 +11,7 @@ async function getRegister(ctx) {
         return
     }
 
-    await ctx.render('register', { pageTitle: 'Register', errorMessage: null })
+    await ctx.defaultRender('register', 'Register', null )
 }
 
 /**
@@ -24,24 +24,18 @@ async function postRegister(ctx) {
         return
     }
 
-    // TODO Check if account with same username already exists
-    // If so, show message about it and return
-    // If not, continue and create account
-    // After successful account creation, check user.util.js for a login method that you can use
-    // Finally, redirect to /
-
     const username = ctx.request.body.username
     const password = ctx.request.body.password
 
     if (username.length > 16) {
-        await ctx.render('register', { pageTitle: 'Register', errorMessage: 'Too long of username lol try again dipshit kys' })
+        await ctx.defaultRender('register', 'Register', 'Too long of username lol try again dipshit kys')
         return
     }
 
     const existingUser = await getUserByUsername(username)
 
     if (existingUser !== null) {
-        await ctx.render('register', { pageTitle: 'Register', errorMessage: 'Username taken!' })
+        await ctx.defaultRender('register', 'Register', 'Username taken!')
         return
     }
 

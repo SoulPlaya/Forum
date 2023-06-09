@@ -8,7 +8,7 @@ async function getPosts(ctx) {
         return
     }
 
-    await ctx.render('Posts', { pageTitle: 'Posts', errorMessage: null })
+    await ctx.defaultRender('Posts', 'Posts', null)
 }
 
 module.exports = {
