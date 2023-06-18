@@ -137,8 +137,8 @@ function rowArrayToUsers(rows) {
 
 /**
  * Creates a new user row and returns it
- * @param {*} username The new user's username
- * @param {*} passwordHash The new user's password hash
+ * @param {string} username The new user's username
+ * @param {string} passwordHash The new user's password hash
  * @returns {Promise<User>} The newly created user
  */
 async function createUserRow(username, passwordHash) {

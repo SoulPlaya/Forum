@@ -1,0 +1,35 @@
+<% if (errorMessage !== null) { %>
+    <p><%= errorMessage %></p>
+<% } else { %>
+
+    <h1>Hello you're looking at -> <%= userProfile.username %></h1>
+
+    <br><br>
+
+    <H2>appearing as: <%= userProfile.displayName %></H2>
+
+    <br>
+
+    <h2>set about me is: <%= userProfile.aboutMe %></h2>
+
+    <br>
+
+    <h2>set wizard-skillset is: <%= userProfile.skillset %></h2>
+
+    <br>
+
+    <h2>to edit your profile press <a id="profileEditor" href="/profileEditor"> here</a></h2>
+
+    <br>
+
+    <h2>Search for wizards below</h2>
+
+    <br>
+
+<% } %>
+
+<form action="" method="GET">
+    <label for="username">Username: </label>
+    <input type="text" name="username" id="username" />
+    <input type="submit" value="View Profile" />
+</form>

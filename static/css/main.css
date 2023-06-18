@@ -16,3 +16,13 @@ a {
     font-weight: bold;
     text-decoration: none;
 }
+
+img {
+    max-width: 10%;
+    float: right;
+    border-radius: 65%;
+  }
+
+  #paragraph {
+    color: rgb(122, 111, 47)
+  }

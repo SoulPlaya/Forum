@@ -6,7 +6,7 @@ const { logOutRequest, createUser, logInRequest } = require("../util/user.util")
  * @param {AppContext} ctx
  */
 async function getRegister(ctx) {
-    if (ctx.isLoggedIn === true) {
+    if (ctx.isLoggedIn) {
         ctx.redirect('/')
         return
     }
@@ -19,7 +19,7 @@ async function getRegister(ctx) {
  * @param {AppContext} ctx 
  */
 async function postRegister(ctx) {
-    if (ctx.isLoggedIn === true) {
+    if (ctx.isLoggedIn) {
         ctx.redirect('/')
         return
     }

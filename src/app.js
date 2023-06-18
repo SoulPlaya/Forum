@@ -24,6 +24,8 @@ const profileEditorController = require('./controller/profileeditor.controller')
 const myProfileController = require('./controller/myprofile.controller')
 const postsController = require('./controller/posts.controller')
 const utilsMiddleware = require('./middleware/utils.middleware')
+const UserProfileController  = require('./controller/UserProfile.controller')
+const createThreadController = require('./controller/createthread.controller')
 
 const PROJECT_ROOT = path.join(__dirname, '..')
 
@@ -86,6 +88,11 @@ async function main() {
 
     router.get('/register', registerController.getRegister)
     router.post('/register', registerController.postRegister)
+
+    router.get('/UserProfile', UserProfileController.getUserProfile)
+
+    router.get('/createthread', createThreadController.getCreateThread )
+    router.post('/createthread', createThreadController.postCreateThread)
 
 
     // Finish setting up the application server
