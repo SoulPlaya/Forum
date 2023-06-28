@@ -1,9 +1,35 @@
+<h1><%= thread.title %></h1>
+
+<div class="thread">
+    <div class="post-author">
+        Posted by <a href="/UserProfile?username=<%= encodeURIComponent(thread.creatorUsername) %>"><%= thread.creatorName %></a> on <%= thread.createdTs %>
+    </div>
+    <div class="post-content"><%=thread.content %></div>
+</div>
+
+<br><br>
+
+<p><% for (const reply of replies) { %>
+    <div class="reply">
+        <div class="post-author">
+            <a href="/UserProfile?username=<%= encodeURIComponent(reply.creatorUsername) %>"><%= reply.creatorName %></a>
+        </div>
+        <div class="post-content"><%= reply.content %> </div>
+        <div class="post-info"><%= reply.createdTs %></div>
+    </div>
+<% } %></p>
+
+<hr>
+
 <form action="" method="POST">
+    <h2>Reply</h2>
     
-    <label for="New-Post">New-Post: </label>
-    <input id="New-Post" name="New-Post" type="New-Post" />
-
+    <textarea maxlength="2000" id="content" name="content" rows="5" cols="33"></textarea>
+    <br>
+    <input type="submit" value="Create Reply" />
     <br><br>
-
-    <input type="submit" value="NewPost" />
 </form>
+
+<% if (errorMessage !== null) { %>
+    <p><%= errorMessage %></p>
+<% } %>

@@ -21,8 +21,27 @@ img {
     max-width: 10%;
     float: right;
     border-radius: 65%;
-  }
+}
 
-  #paragraph {
+#paragraph {
     color: rgb(122, 111, 47)
-  }
+}
+
+/* Forum */
+.reply {
+    margin: 10px;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+.post-content {
+    white-space: pre-wrap;
+}
+.post-author {
+    font-weight: bolder;
+}
+
+.post-info {
+    font-style: italic;
+    margin-top: 10px;
+}

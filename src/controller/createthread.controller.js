@@ -13,7 +13,7 @@ async function render(ctx, errorMessage = null, currentTitle = '', currentConten
         currentContent,
     })
 }
-  
+
 /**
  * GET handler for the create thread page
  * @param {AppContext} ctx
@@ -50,7 +50,7 @@ async function postCreateThread(ctx) {
         return
     }
 
-    const post = await createThread(content, title, ctx.user.id)
+    const post = await createThread(title, content, ctx.user.id)
     ctx.redirect('/thread/' + post.id)
 }
 

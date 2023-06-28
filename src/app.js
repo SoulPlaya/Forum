@@ -27,6 +27,7 @@ const utilsMiddleware = require('./middleware/utils.middleware')
 const UserProfileController  = require('./controller/UserProfile.controller')
 const createThreadController = require('./controller/createthread.controller')
 
+
 const PROJECT_ROOT = path.join(__dirname, '..')
 
 async function main() {
@@ -94,6 +95,8 @@ async function main() {
     router.get('/createthread', createThreadController.getCreateThread )
     router.post('/createthread', createThreadController.postCreateThread)
 
+    router.get('/thread/:id', postsController.getPosts)
+    router.post('/thread/:id', postsController.postPosts)
 
     // Finish setting up the application server
     app
