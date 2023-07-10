@@ -5,10 +5,11 @@ const { Post, createPostRow } = require("../model/posts.model")
  * @param {string} title The thread title
  * @param {string} content The thread's text content
  * @param {number} creatorId The ID of the user that created the thread
+ * @param {string} threadImg the Image the post creator adds
  * @returns {Promise<Post>} The newly created thread
  */
-async function createThread(title, content, creatorId) {
-    return await createPostRow(content, title, null, creatorId)
+async function createThread(title, content, creatorId, threadImg) {
+    return await createPostRow(content, title, null, creatorId, threadImg)
 }
 
 /**
@@ -18,8 +19,8 @@ async function createThread(title, content, creatorId) {
  * @param {number} creatorId ID of person who creates reply
  * @returns {Promise<Post>} The newly created thread
  */
-async function createReply(threadId, content, creatorId) {
-    return await createPostRow(content, null, threadId, creatorId)
+async function createReply(threadId, content, creatorId, threadImg) {
+    return await createPostRow(content, null, threadId, creatorId, null)
 }
 
 module.exports = {

@@ -6,3 +6,6 @@
  - Each thread listing should have 2 lines:
    - THREAD TITLE
    - Created on TIME by CREATOR NAME
+
+  - make user submitted images be added into UserImages and displayed with there post 
+   -Half of this is done we already store the name of the img in db now it's mostly front end work

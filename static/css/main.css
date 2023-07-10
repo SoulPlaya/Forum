@@ -17,7 +17,7 @@ a {
     text-decoration: none;
 }
 
-img {
+#wizard1 {
     max-width: 10%;
     float: right;
     border-radius: 65%;
@@ -44,4 +44,10 @@ img {
 .post-info {
     font-style: italic;
     margin-top: 10px;
+}
+
+#concentrate-container {
+    text-align: center;
+    background-color: black;
+    color: aqua;
 }

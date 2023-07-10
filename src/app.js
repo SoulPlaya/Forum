@@ -11,6 +11,8 @@ const { koaBody } = require('koa-body')
 
 const dbUtil = require('./util/db.util')
 
+const { createConcentrateRowOrIgnore } = require('./model/concentrate.model')
+
 // Load middleware modules
 const loggerMiddleware = require('./middleware/logger.middleware')
 const authMiddleware = require('./middleware/auth.middleware')
@@ -22,16 +24,18 @@ const homeController = require('./controller/home.controller')
 const loginController = require('./controller/login.controller')
 const profileEditorController = require('./controller/profileeditor.controller')
 const myProfileController = require('./controller/myprofile.controller')
-const postsController = require('./controller/posts.controller')
+const postsController = require('./controller/threads.controller')
 const utilsMiddleware = require('./middleware/utils.middleware')
 const UserProfileController  = require('./controller/UserProfile.controller')
 const createThreadController = require('./controller/createthread.controller')
+const concentrateController = require('./controller/concentrate.controller')
 
 
 const PROJECT_ROOT = path.join(__dirname, '..')
 
 async function main() {
     await dbUtil.initDb()
+    await createConcentrateRowOrIgnore()
 
     // Create Koa application and its router
     const app = new Koa()
@@ -85,8 +89,6 @@ async function main() {
 
     router.get('/my-profile', myProfileController.getMyProfile)
 
-    router.get('/posts', postsController.getPosts)
-
     router.get('/register', registerController.getRegister)
     router.post('/register', registerController.postRegister)
 
@@ -95,8 +97,11 @@ async function main() {
     router.get('/createthread', createThreadController.getCreateThread )
     router.post('/createthread', createThreadController.postCreateThread)
 
-    router.get('/thread/:id', postsController.getPosts)
-    router.post('/thread/:id', postsController.postPosts)
+    router.get('/thread/:id', postsController.getThreads)
+    router.post('/thread/:id', postsController.postThreads)
+
+    router.get('/concentrate', concentrateController.getConcentrate)
+    router.post('/concentrate', concentrateController.postConcentrate)
 
     // Finish setting up the application server
     app

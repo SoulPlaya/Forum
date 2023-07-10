@@ -109,6 +109,12 @@ class ThreadInfo {
     updatedTs
 
     /**
+     * The threads attached image 
+     * @type {string}
+     */
+    threadImg
+
+    /**
      * Returns the creator's name, either the creator's display name, or username if no display name is set
      * @type {string}
      */
@@ -326,16 +332,17 @@ function rowArrayToReplyInfos(rows) {
  * @param {string | null} threadTitle The thread's title
  * @param {number | null} threadId The thread's ID
  * @param {number} creatorId The creator's ID 
+ * @param {string | null} threadImg the added img from user
  * @returns {Promise<Post>} The newly created post
  */
-async function createPostRow(content, threadTitle, threadId, creatorId) {
+async function createPostRow(content, threadTitle, threadId, creatorId, threadImg) {
     const res = await query(
         `
-        insert into posts (content, thread_title, thread_id, creator_id)
-        values ($1, $2, $3, $4)
+        insert into posts (content, thread_title, thread_id, creator_id, post_image_filename)
+        values ($1, $2, $3, $4, $5)
         returning *
         `,
-        [content, threadTitle, threadId, creatorId]
+        [content, threadTitle, threadId, creatorId, threadImg]
     )
 
     return rowToPost(res[0])

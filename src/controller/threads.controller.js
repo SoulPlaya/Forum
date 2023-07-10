@@ -22,7 +22,7 @@ async function render(ctx, thread, errorMessage = null) {
  * @param {AppContext} ctx
  * @param {NextFunction} next
  */
-async function getPosts(ctx, next) {
+async function getThreads(ctx, next) {
     if (!ctx.isLoggedIn) {
         ctx.redirect('/login')
         return
@@ -49,7 +49,7 @@ async function getPosts(ctx, next) {
  * @param {AppContext} ctx
  * @param {NextFunction} next
  */
-async function postPosts(ctx, next) {
+async function postThreads(ctx, next) {
     if (!ctx.isLoggedIn) {
         ctx.redirect('/login')
         return
@@ -83,6 +83,6 @@ async function postPosts(ctx, next) {
 }
 
 module.exports = {
-    getPosts,
-    postPosts,
+    getThreads,
+    postThreads,
 }

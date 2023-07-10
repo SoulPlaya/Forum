@@ -39,6 +39,7 @@ async function postCreateThread(ctx) {
 
     const title = ctx.request.body['title']
     const content = ctx.request.body['content']
+    const file = ctx.request.body['file']
 
     if (title.length > 50) {
         await render(ctx, 'Too long of title lol try again dipshit kys', title, content)
@@ -50,7 +51,11 @@ async function postCreateThread(ctx) {
         return
     }
 
-    const post = await createThread(title, content, ctx.user.id)
+    if (file.length > 255) {
+        await render(ctx, 'Your massive file needs to be shrank homie')
+    }
+
+    const post = await createThread(title, content, ctx.user.id, file)
     ctx.redirect('/thread/' + post.id)
 }
 
