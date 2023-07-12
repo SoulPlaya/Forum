@@ -1,6 +1,7 @@
 const config = require('../config.json')
 
 const Koa = require('koa')
+const http = require('node:http')
 const Router = require('@koa/router')
 const session = require('koa-session')
 const render = require('@koa/ejs')
@@ -10,6 +11,9 @@ const koaMount = require('koa-mount')
 const { koaBody } = require('koa-body')
 
 const dbUtil = require('./util/db.util')
+
+// Services
+const websocketService = require('./service/websocket.service')
 
 const { createConcentrateRowOrIgnore } = require('./model/concentrate.model')
 
@@ -39,7 +43,11 @@ async function main() {
 
     // Create Koa application and its router
     const app = new Koa()
+    const appHttp = http.createServer(app.callback())
     const router = new Router()
+
+    // Initialize services
+    await websocketService.init(appHttp)
 
     // Mount static files located in the "static" directory at /static on the webserver
     app.use(koaMount('/static', koaStatic(path.join(PROJECT_ROOT, 'static'))))
@@ -101,14 +109,14 @@ async function main() {
     router.post('/thread/:id', postsController.postThreads)
 
     router.get('/concentrate', concentrateController.getConcentrate)
-    router.post('/concentrate', concentrateController.postConcentrate)
+    router.post('/api/concentrate', concentrateController.apiPostConcentrate)
 
     // Finish setting up the application server
     app
         .use(router.routes())
         .use(router.allowedMethods())
 
-    app.listen(
+    appHttp.listen(
         config.server.port,
         config.server.host,
         () => console.log(`Listening on ${config.server.host}:${config.server.port}`)
@@ -116,16 +124,3 @@ async function main() {
 }
 
 main()
-
-
-/*
-Create user profile page.
-The URL format will be: /profile, and then you can get the username from ctx.query.username.
-Example: The user visits /profile?username=jimmy and it shows the profile info from jimmy.
-
-You can use the getUserByUsername function in users.model.js. Make sure to check if the user returned is not null, like you did on login controller.
-Remember, you can inject the user with defaultRender's last argument as an object.
-Example: ctx.defaultRender('profile', 'Profile', null, { profileUser: theUserObjectYouGotFromGetUserByUsername })
-
-Use an ejs template like normal to display the profile info.
-*/

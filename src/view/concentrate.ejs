@@ -1,10 +1,22 @@
 <div id="concentrate-container">
-    <p>Times meditated: <%= count %></p>
+    <p>Times meditated: <span id="count"><%= count %></span></p>
+    <p>Community goal for a reward: 10,000!</p>
+    <% if (count > 10_000) { %>
+        <p>REWARD UNLOCKED: RPG WIZARD GAME SOON</p>
+    <% } %>
     
-    <form action="" method="POST">
-        <input type="submit" value="Meditate" />
-    </form>
+    <button type="button" id="meditate">Concentrate</button>
 
-    <img src="../static/ImagesNonUser/the_pondering.png"
+    <dialog id="haveConcentrated" >
+        <form method="dialog">
+            <p>You have meditated and rested come back whenever you need</p>
+
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- <img src="../static/ImagesNonUser/the_pondering.png">
+    <img src="../static/ImagesNonUser/searchingWizard.jpg"> -->
 </div>
 
+<script src="/static/js/concentrate.js"></script>

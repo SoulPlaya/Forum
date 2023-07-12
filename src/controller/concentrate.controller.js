@@ -1,4 +1,5 @@
 const { getConcentrateCount, incrementConcentrateCount } = require("../model/concentrate.model")
+const { broadcast } = require("../service/websocket.service")
 
 /**
  * @param {AppContext} ctx
@@ -25,19 +26,34 @@ async function getConcentrate(ctx) {
 /**
  * @param {AppContext} ctx
  */
-async function postConcentrate(ctx) {
+async function apiPostConcentrate(ctx) {
     if (!ctx.isLoggedIn) {
-        ctx.redirect('/')
+        ctx.response.status = 403
+        ctx.body = { message: 'unauthorized' }
         return
     }
 
-   const newCount = await incrementConcentrateCount()
+    const newCount = await incrementConcentrateCount()
+    broadcast('concentrate', newCount)
 
-   await render(ctx, newCount)
+    ctx.body = { count: newCount }
+}
 
+async function apiGetConcentrateCount(ctx) {
+    if (!ctx.isLoggedIn) {
+        ctx.response.status = 403
+        ctx.body = { message: 'unauthorized' }
+        return
+    }
+
+    const currentCount = await getConcentrateCount()
+
+
+    ctx.body = {count: currentCount}
+    return 
 }
 
 module.exports = {
     getConcentrate,
-    postConcentrate,
+    apiPostConcentrate,
 }

@@ -9,6 +9,6 @@
         "resolveJsonModule": true,
     },
 
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "static/**/*"],
     "exclude": ["**/*.spec.ts"],
 }

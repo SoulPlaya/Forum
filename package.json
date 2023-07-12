@@ -15,7 +15,8 @@
     "funny",
     "cool",
     "enjoyable",
-    "family-friendly"
+    "family-friendly",
+    "christian"
   ],
   "author": "soul & termer",
   "license": "ISC",
@@ -31,7 +32,8 @@
     "koa-mount": "^4.0.0",
     "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
-    "pg": "^8.11.0"
+    "pg": "^8.11.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@koa/ejs": "^5.1.0",
@@ -44,6 +46,7 @@
     "@types/koa-router": "^7.4.4",
     "@types/koa-session": "^6.4.1",
     "@types/koa-static": "^4.0.2",
-    "@types/pg": "^8.10.1"
+    "@types/pg": "^8.10.1",
+    "@types/ws": "^8.5.5"
   }
 }
