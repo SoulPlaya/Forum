@@ -1,5 +1,6 @@
 const { ThreadInfo, Post, getThreadById } = require("../model/posts.model")
 const { getReplies } = require("../model/posts.model")
+const { broadcast } = require("../service/websocket.service")
 const { createReply } = require ("../util/post.util")
 
 
@@ -11,7 +12,7 @@ const { createReply } = require ("../util/post.util")
 async function render(ctx, thread, errorMessage = null) {
     const replies = await getReplies(thread.id, 0, Number.MAX_SAFE_INTEGER)
 
-    await ctx.defaultRender('Posts', thread.title, errorMessage, {
+    await ctx.defaultRender('singleThread', thread.title, errorMessage, {
         thread,
         replies,
     })
@@ -22,7 +23,7 @@ async function render(ctx, thread, errorMessage = null) {
  * @param {AppContext} ctx
  * @param {NextFunction} next
  */
-async function getThreads(ctx, next) {
+async function getSingleThread(ctx, next) {
     if (!ctx.isLoggedIn) {
         ctx.redirect('/login')
         return
@@ -49,7 +50,7 @@ async function getThreads(ctx, next) {
  * @param {AppContext} ctx
  * @param {NextFunction} next
  */
-async function postThreads(ctx, next) {
+async function postSingleThread(ctx, next) {
     if (!ctx.isLoggedIn) {
         ctx.redirect('/login')
         return
@@ -75,14 +76,18 @@ async function postThreads(ctx, next) {
         return
     }
 
-    createReply(postId, reply, ctx.user.id)
+    const post = await createReply(postId, reply, ctx.user.id)
 
     await render(ctx, thread)
     
     ctx.redirect(ctx.originalUrl)
+
+    await broadcast('reply', post)
+
 }
 
+
 module.exports = {
-    getThreads,
-    postThreads,
+    getSingleThread,
+    postSingleThread,
 }

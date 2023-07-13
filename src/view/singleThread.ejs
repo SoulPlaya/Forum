@@ -1,3 +1,8 @@
+<div
+    id="thread-info"
+    data-thread-id="<%= thread.id %>"
+    ></div>
+
 <h1><%= thread.title %></h1>
 
 <div class="thread">
@@ -33,3 +38,14 @@
 <% if (errorMessage !== null) { %>
     <p><%= errorMessage %></p>
 <% } %>
+
+<dialog id="newReplies" >
+    <form method="dialog">
+        <p>New replies are available! Refresh wizard?</p>
+
+        <button id="refreshButton">refresh</button>
+        <button>close</button>
+    </form>
+</dialog>
+
+<script src="/static/js/thread.js"></script>

@@ -1,0 +1,19 @@
+<h1>List of fellow wizards threads below</h1>
+
+<br><br>
+
+<div class="thread-listings">
+    <% for (const thread of threads) { %>
+        <div class="thread-listing">
+            <div class="thread-listing-title">
+                <a href="/thread/<%= thread.id %>"><%= thread.title %></a>
+            </div>
+            <div class="thread-listing-author">
+                By: <a href="/UserProfile?username=<%= encodeURIComponent(thread.creatorUsername) %>"><%= thread.creatorUsername %></a>
+            </div>
+            <div class="time-made">
+                <%= thread.createdTs %>
+            </div>
+        </div>
+    <% } %></p>
+</div>

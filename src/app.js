@@ -28,11 +28,12 @@ const homeController = require('./controller/home.controller')
 const loginController = require('./controller/login.controller')
 const profileEditorController = require('./controller/profileeditor.controller')
 const myProfileController = require('./controller/myprofile.controller')
-const postsController = require('./controller/threads.controller')
+const singleThreadController = require('./controller/singleThread.controller')
 const utilsMiddleware = require('./middleware/utils.middleware')
 const UserProfileController  = require('./controller/UserProfile.controller')
 const createThreadController = require('./controller/createthread.controller')
 const concentrateController = require('./controller/concentrate.controller')
+const threadListingController = require('./controller/threadListing.controller')
 
 
 const PROJECT_ROOT = path.join(__dirname, '..')
@@ -105,11 +106,13 @@ async function main() {
     router.get('/createthread', createThreadController.getCreateThread )
     router.post('/createthread', createThreadController.postCreateThread)
 
-    router.get('/thread/:id', postsController.getThreads)
-    router.post('/thread/:id', postsController.postThreads)
+    router.get('/thread/:id', singleThreadController.getSingleThread)
+    router.post('/thread/:id', singleThreadController.postSingleThread)
 
     router.get('/concentrate', concentrateController.getConcentrate)
     router.post('/api/concentrate', concentrateController.apiPostConcentrate)
+
+    router.get('/threads', threadListingController.getThreadListing)
 
     // Finish setting up the application server
     app

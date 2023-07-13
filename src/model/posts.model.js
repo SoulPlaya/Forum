@@ -37,7 +37,7 @@ class Post {
 
     /**
      * The thread this post belongs to if it's a reply, otherwise `null` if it's a thread
-     * @type {string | null}
+     * @type {number | null}
      */
     threadId
     
@@ -349,9 +349,9 @@ async function createPostRow(content, threadTitle, threadId, creatorId, threadIm
 }
 
 /**
- * Gets all users (applying the specified offset and limit).
- * @param {number} offset The offset of users to return
- * @param {number} limit The maximum number of users to return
+ * Gets all threads (applying the specified offset and limit).
+ * @param {number} offset The offset of threads to return
+ * @param {number} limit The maximum number of threads to return
  * @returns {Promise<ThreadInfo[]>} The threads
  */
 async function getThreads(offset, limit) {
@@ -422,6 +422,18 @@ async function getThreadById(id) {
 }
 
 /**
+ * Returns the total number of threads
+ * @returns {Promise<number>} The total number of threads
+ */
+async function getThreadCount() {
+    const res = await query(`
+    select count(*) as total
+    from posts
+    `)
+    return res[0].total
+}
+
+/**
  * Deletes the user with the specified ID
  * @param {number} id The user's ID
  */
@@ -438,4 +450,5 @@ module.exports = {
     deletePostsById,
     ThreadInfo,
     ReplyInfo,
+    getThreadCount,
 }
