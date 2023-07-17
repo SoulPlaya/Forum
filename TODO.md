@@ -7,10 +7,18 @@
   - Reconnect websocket when it disconnects
 
 # In-Progress
-  - Rename posts.controller.js to thread.controller.js (and rename the view file to thread.ejs or similar, you'll likely need to update app.js)
+  - Add CSS to threads listing page so that it doesn't look so jumbled
 
-  - Create a threads page that shows threads sorted by created_ts in descending order (you already have getThreads or whatever it's called, just change asc to desc in the query)
-    - The threads page should be located at "/threads"
-    - Each thread listing should have 2 lines:
-      - THREAD TITLE
-      - Created on TIME by CREATOR NAME
+  - Add pagination to threads listing page
+    - The bottom of page should show the current page number, and have arrows as links using < and >
+      - It should look more or less like this: < 3 >
+      - If the page is 1, the < shouldn't be a link
+      - If the page is the last page, the > shouldn't be a link
+      - Otherwise, those links should go to the previous and next pages, respectively
+    
+    - The URL format should be /threads/:page
+    - There is an example of retrieving a route/path param in the thread controller, where we retrieve the thread ID
+    - To get the offset based on page number, it should be something like this:
+      - `const offset = (pageNum - 1) * pageSize`
+    - To get the total number of pages, you do:
+      - `const totalPages = Math.ceil(totalPosts / pageSize) + 1`

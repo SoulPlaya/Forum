@@ -34,6 +34,7 @@ const UserProfileController  = require('./controller/UserProfile.controller')
 const createThreadController = require('./controller/createthread.controller')
 const concentrateController = require('./controller/concentrate.controller')
 const threadListingController = require('./controller/threadListing.controller')
+const wizardChadController = require ('./controller/wizardChad.controller')
 
 
 const PROJECT_ROOT = path.join(__dirname, '..')
@@ -113,6 +114,8 @@ async function main() {
     router.post('/api/concentrate', concentrateController.apiPostConcentrate)
 
     router.get('/threads', threadListingController.getThreadListing)
+
+    router.get('/wizardChad', wizardChadController.getWizardChad)
 
     // Finish setting up the application server
     app
