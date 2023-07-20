@@ -1,8 +1,8 @@
 <% if (errorMessage !== null) { %>
     <p><%= errorMessage %></p>
 <% } %>
-
-<form action="" method="POST">
+<div id="login-page">
+<form action="" method="POST" id="">
     <label for="username">Username: </label>
     <input id="username" name="username" type="text" />
 
@@ -16,4 +16,5 @@
     <input type="submit" value="Log In" />
 </form>
 
-<img src="../static/ImagesNonUser/a_wizard_man.png">
+<img src="../static/ImagesNonUser/a_wizard_man.png" id="login-img">
+</div>
